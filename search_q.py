@@ -9,13 +9,13 @@ and the user should be able to perform a question action (as discussed next).
 
 THINGS TO WORK ON:
 - Maybe have different conditions for searching? (eg. If the term has a length greater than 3, than search terms array, etc)
+[UPDATE: Searches based on the assumption that the terms of the title, body, and tags with a length of 3 or more
+is in a terms array and are in lowercase form, terms that have a length of 2 or less are searched with regular expression]
 
 - Understand what needs to be returned (whether it's the keyword itself or if the keyword is part of a word)
-[UPDATE: partial searches are allowed but not required]
+[UPDATE: partial searches are allowed but not required...in the code, partial searches are also made]
 
 """
-
-
 
 from pymongo import MongoClient
 import sys
@@ -42,8 +42,13 @@ def user_keywords():
 	finished = False # the user has not finished searching keywords
 
 	while not finished:
+
 		user_input = input('Enter a keyword: ')
-		keyword_list.append(user_input)
+
+		while user_input.strip() == '': # If the user enters an empty string as their keyword
+			user_input = input('Enter a keyword: ')
+
+		keyword_list.append(user_input.strip()) # assuming if the user adds any random spaces (eg. '   no')
 
 		ask_again = input('Would you like to enter another keyword (y/n): ').lower()
 
@@ -70,22 +75,26 @@ def main():
 	q_num = 1 # will be used to display the results (eg. Question 1, Question 2, etc)
 	posts_list = []  # keeps track of the posts and prevents the same posts from being displayed more than once
 
-	for keyword in keyword_list: # for each keyword entered by the user
+	for keyword.lower() in keyword_list: # for each keyword entered by the user
 
 		# checks if the keyword exists in either the body, title, or tag (if the length is less than 3)
 		if len(keyword) < 3:
-			k_posts = posts_col.find({'$or': [
+			k_posts = posts_col.find({'PostTypeId': '1', '$or': [
 								{'Body': {'$regex': keyword, '$options': 'i'}}, # 'i' is an option for case-insensitive
 								{'Title': {'$regex': keyword, '$options': 'i'}}, 
 								{'Tags':{'$regex': keyword, '$options': 'i'}}
 								]})
 		else:
-			k_posts = posts_col.find({'Terms': {'$in': keyword.split()}}) # used to search the terms array
+			k_posts = posts_col.find({'PostTypeId': '1', 'Terms': {'$in': keyword.split()}}) # used to search the terms array
 			# checks if the Terms field contains the keyword 
 		
 
 		# for each post, some information about the post is displayed
 		for post in k_posts:
+			
+			if q_num == 201: # displays a maximum of 200 results
+				break
+
 			if post['Id'] not in posts_list:
 				posts_list.append(post['Id'])
 				print('------------------------------')
@@ -105,16 +114,18 @@ def main():
 		print('The keyword(s) you have provided did not return any results. Please try using other keywords.')
 		return # will return None if no posts were displayed to the user
 
-
 	# the user chooses from the results displayed above
-	user_select = input('Select the question by typing in the number associated with that question: ')		
+	user_select = input('Select the question by typing in the number associated with that question: ')
+
+	while user_select not in q_options.keys():	
+		user_select = input('Invalid input. Select a question number above: ')	
 	
 	# the following displays all the fields of the question post selected by the user
 	print('\n==================================================================')
 	print('POST INFO: \n')
 	selected_post = posts_col.find_one({'Id': q_options[user_select]}, {'_id': 0}) # Does not display the '_id' or ObjectId
 
-	# increases the view count of the question post by 1
+	# increases the view count of the question post by 1 (before displaying all the fields)
 	posts_col.update_one({'Id': q_options[user_select]}, {'$set': {'ViewCount': selected_post['ViewCount'] + 1}})
 
 	for key,value in selected_post.items(): # prints out all the fields of a question post
