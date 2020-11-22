@@ -43,10 +43,15 @@ def q_input(user_id = ''):
 
 	# will be used to store the title, body, and tags 
 	q_info_dict = {'Title': '', 'Body': '', 'Tags':'', 'OwnerUserId': str(user_id)} 
+
 	title = input("Enter a title: ")
+	while title.strip() == '': # the user did not enter a title
+		title = input("Please enter a title: ")
 	q_info_dict['Title'] = title
 
 	body = input("Enter a body: ")
+	while body.strip() == '': # the user did not enter a body
+		body = input("Please enter a body: ")
 	q_info_dict['Body'] = body
 
 	
@@ -61,7 +66,6 @@ def q_input(user_id = ''):
 		while user_tag.strip() == '': # if the user enters an empty string
 			user_tag = input("Invalid Input. Enter a tag (one tag at a time): ")
 
-
 		tag_list.append(user_tag)
 
 		ask_tag = input("Would you like to enter another tag? (Enter 'y' for yes or 'n' for no): ").lower()
@@ -73,7 +77,7 @@ def q_input(user_id = ''):
 
 
 	# Add tag count if tag already exists, otherwise insert tag and its count as 1
-	tag_collection = database['tags_col']
+	tag_collection = database['tags_col'] # in actual project, should be called Tags
 
 	for tag in tag_list: # for each tag entered by the user
 		tag_results = tag_collection.find_one({"TagName": tag.lower()}) # only one result is expected
@@ -82,11 +86,10 @@ def q_input(user_id = ''):
 			tag_collection.update_one({"TagName": tag.lower()}, ({"$set": {"Count": tag_results['Count'] + 1}}))
 			# increases the tag count by 1
 		else:
-			pid = check_unique_pid() # generates a unique pid
+			pid = check_unique_pid() # generates a unique id for the tag
 			tag_collection.insert_one({'Id': pid, 'TagName': tag, 'Count': 1}) # new tag with an initial count of 1
 
 
-	print(q_info_dict)
 	return q_info_dict
 
 """
@@ -140,19 +143,20 @@ def main():
 	if len(q_dict['Tags']) > 0: # if the user has entered tag(s)
 		for tag in q_dict['Tags']:
 			modified_tags += '<' + tag + '>'
-		question['Tags'] = modified_tags
+		question['Tags'] = modified_tags # a tag field will only exist if one or more tags have been entered 
 
 
-	# if the title, body, tags, or OwnerUserId is not an empty string, then it can be inserted. Otherwise,
-	# the title, body, tags or OwnerUserId should not be inserted if none of them were provided by the user
+	# if the OwnerUserId is not an empty string, then it can be inserted. Otherwise,
+	# it should not be inserted
 	for key,value in q_dict.items():
-		if key != 'Tags' and len(value) > 0: 
-			question[key] = value
+		if key == 'OwnerUserId' and len(value) > 0: 
+			question[key] = value # the OwnerUserId field will only exist if the user is not anonymous
 
-	p_collection.insert_one(question)
+	p_collection.insert_one(question) # inserts the question into the database
+	print('Your question has been posted!')
 
 
-# main()
+main()
 
 # Sources:
 # https://stackoverflow.com/questions/11040177/datetime-round-trim-number-of-digits-in-microseconds
