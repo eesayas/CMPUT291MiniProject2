@@ -4,6 +4,7 @@ from user_report import ask_for_user_id, checks_for_user_id, showReport, nullRep
 from post_question import postQuestion
 from search_question import searchQuestions
 from question_actions import create_answer, list_answers
+from answer_actions import vote
 
 def main():
     # TODO clarify error check on invalid port?
@@ -27,6 +28,16 @@ def main():
 
     # show main menu
     mainMenu()
+
+def exit():
+    global user
+    user = ""
+    # this will print when exit() is called
+    print("\nGoodbye!\n")
+
+    # standard python exit
+    sys.exit()
+
 
 """-----------------------------------------------------------------
 chooseUser - Allow user to propvide user_id
@@ -112,8 +123,75 @@ def question_action(qid):
 
         # user chose to list answer to a question
         elif action == '2':
-            list_answers(qid, posts)
-            mainMenu()
+            answers = list_answers(qid, posts)
+            while (True):
+                choice = input("Select the index number of the answer you would like to select or enter 'exit' to exit or 'menu' to go back to main menu: ")
+                if (choice.lower() == "exit"):
+                    exit()
+                elif (choice.lower() == "menu"):
+                    mainMenu()
+                else:
+                    try:
+                        if (int(choice)>=index):
+                            print("Not a valid choice")
+                        else:
+                            break
+                    except:
+                        print("Not a valid choice")
+            chosenId = answers[int(choice)]
+            results = posts.find({"Id": str(chosenId)})
+            for result in results:
+                try: 
+                    postTypeId = result["PostTypeId"]
+                except:
+                    postTypeId = "No postTypeId"
+                try: 
+                    parentId = result["ParentId"]
+                except:
+                    parentId = "No parentId"
+                try: 
+                    creationDate = result["CreationDate"]
+                except:
+                    creationDate = "No CreationDate"
+                try: 
+                    score = result["Score"]
+                except:
+                    score = "No Score"
+                try: 
+                    body = result["Body"]
+                except:
+                    body = "No Body"
+                try: 
+                    ownerUserId = result["OwnerUserId"]
+                except:
+                    ownerUserId = "No OwnerUserId"
+                try: 
+                    lastActivityDate = result["LastActivityDate"]
+                except:
+                    lastActivityDate = "No LastActivityDate"
+                try: 
+                    commentCount = result["CommentCount"]
+                except:
+                    commentCount = "No CommentCount"
+                try: 
+                    contentLicense = result["ContentLicense"]
+                except:
+                    contentLicense = "No ContentLicense"
+                print("Id: " +str(result["Id"]) +"\nPostTypeId: "+str(postTypeId) + "\nParent Id: "+str(parentId)+"\nCreationDate: "+str(creationDate)+"\nScore: "+str(score)+"\nBody: "+str(body)+"\nOwnerUserId: "+str(ownerUserId)+"\nLastActivityDate: "+str(lastActivityDate)+"\nCommentCount: "+str(commentCount)+"\nContentLicense: "+str(contentLicense)+"\nScore: "+str(score))
+                while(True):
+                    voteChoice = input("Would you like to vote on this post? Enter either 'yes', 'no', 'exit' or 'menu': ")
+                    if (voteChoice.lower() == "yes"):
+                        vote(str(chosenId),user,posts,votes)
+                        mainMenu()
+                    elif (voteChoice.lower() == "no"):
+                        mainMenu()
+                    elif (voteChoice.lower() == "menu"):
+                        mainMenu()
+                    elif (voteChoice.lower() == "exit"):
+                        exit()
+                    else:
+                        print("Not a valid choice") 
+                mainMenu()
     
         # user wants to go back
         elif action == '3':

@@ -299,14 +299,14 @@ def vote(postId):
     print("Vote added! Post "+ postId + " has also had its Score increased")
     return
 
-def exit():
-    global user
-    user = ""
+#def exit():
+#    global user
+#    user = ""
     # this will print when exit() is called
-    print("\nGoodbye!\n")
+#    print("\nGoodbye!\n")
 
     # standard python exit
-    sys.exit()
+#    sys.exit()
 
 """
 The user will be asked to enter a title, a body, and tags (which can be zero tags or more), which will then be
