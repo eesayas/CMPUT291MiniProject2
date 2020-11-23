@@ -386,7 +386,7 @@ def user_keywords():
 		while user_input.strip() == '': # If the user enters an empty string as their keyword
 			user_input = input('Enter a keyword: ')
 
-		keyword_list.append(user_input.strip()) # assuming if the user adds any random spaces (eg. '   no')
+		keyword_list.append(user_input.strip().lower()) # assuming if the user adds any random spaces (eg. '   no')
 
 		ask_again = input('Would you like to enter another keyword (y/n): ').lower()
 
@@ -431,7 +431,7 @@ def search():
 	q_num = 1 # will be used to display the results (eg. Question 1, Question 2, etc)
 	posts_list = []  # keeps track of the posts and prevents the same posts from being displayed more than once
 
-	for keyword.lower() in keyword_list: # for each keyword entered by the user
+	for keyword in keyword_list: # for each keyword entered by the user
 
 		# checks if the keyword exists in either the body, title, or tag (if the length is less than 3)
 		if len(keyword) < 3:
