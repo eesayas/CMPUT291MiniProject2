@@ -1,11 +1,11 @@
-import json
-from os import execlp
-import re
+import json, sys, re
 from pymongo import MongoClient
 
 def main():
-    # TODO change later for dynamic port argument
-    client = MongoClient('mongodb://localhost:27017')
+    # TODO clarify error check on invalid port?
+    port = sys.argv[1]
+
+    client = MongoClient('mongodb://localhost:' + port)
 
     # Create or open database
     db = client["291db"]
@@ -31,7 +31,13 @@ def main():
         posts_data = posts_data["posts"]["row"] # extract proper data from JSON
 
     # FOR GROUPS OF 3: Create new field "terms"
-    posts_data = map(extractTerms, posts_data)
+    # call setTerms() func on map to insert terms on post_data
+    posts_data = map(setTerms, posts_data)
+
+    # NOTE: comment out for testing only
+    # for r in posts_data:
+    #     print(r)
+    #     print("\n")
 
     # insert to collection
     posts.insert_many(posts_data)
@@ -52,46 +58,93 @@ def main():
     # insert to collection
     votes.insert_many(votes_data)
 
-# helper function
-def extractTerms(post):
-    terms = []
-    delimeters = ' |\n|\?|\"|\.|\,|\(|\)'
-    clean = re.compile('<.*?>')
+    print("Successfully inserted Posts.json, Tags.json, Votes.json to '291db' Mongo database on port " + port)
 
+'''
+setTerms() - Helper function: Set Terms for a post
+Purpose: This will extract terms (via other helper functions) and set it to post
+
+Params: post - a dict
+Return: post - updated or not dict
+'''
+def setTerms(post):
+    terms = set([]) #define set
+
+    # try "Title" field
     try:
-        
-        titleTerms = re.sub(clean, ' ', post["Title"])
-        titleTerms = re.split(delimeters, titleTerms)
-        titleTerms = list(set(filter(filterSmallTerms, titleTerms)))
-
-        terms += titleTerms
-
+       terms.update(extractTerms(post["Title"], False))
     except KeyError:
         pass
 
+    # try "Body" field
     try:
-        bodyTerms = re.sub(clean, ' ', post["Body"])
-        bodyTerms = re.split(delimeters, bodyTerms)
-        bodyTerms = list(set(filter(filterSmallTerms, bodyTerms)))
-
-        terms += bodyTerms
-
+       terms.update(extractTerms(post["Body"], False))
     except KeyError:
         pass
 
+    # try "Tag" field
+    try:
+        terms.update(extractTerms(post["Tags"], True))
+    except KeyError:
+        pass
+
+    # if len of terms is not 0, set a terms field
     if len(terms):
-        post["terms"] = terms
+        post["terms"] = list(terms)
     
     return post
 
+'''
+extractTerms() - Helper function: Extract Terms from a string
+Purpose: This will parse out html tags, whitespace and punctuations
 
-# helper function: filter length < 3
+Params: field - Title or Body or Tag (a string)
+        isTag - if field is Tag (a boolean)
+
+Return: list - a list of string terms
+'''
+def extractTerms(field, isTag):
+    if isTag:
+        delimeters = '\<|\>'
+
+        # extract terms by spliting on delimeters
+        terms = re.split(delimeters, field)
+
+    else:
+        delimeters = ' |\n|\?|\"|\.|\,|\(|\)'
+
+        # parse HTML tags
+        field = re.sub('<[^<]*?/?>', ' ', field) 
+        
+        # extract terms by spliting on delimeters
+        terms = re.split(delimeters, field) 
+
+    # if/else end
+
+    # make unique
+    terms = list(set(terms))
+
+    # filter out smaller terms
+    terms = filter(filterSmallTerms, terms)
+
+    # return terms
+    return terms
+
+'''
+filterSmallTerms() - Helper function: Filter Out Small Terms
+Purpose: Given a term, if its length is less than 3 return False, else True
+
+Params: term - a String
+
+Return: boolean - true or false
+'''
 def filterSmallTerms(term):
     if len(term) < 3:
         return False
     else:
         return True
 
+# call main
 main()
 
 
