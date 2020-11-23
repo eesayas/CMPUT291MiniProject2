@@ -146,7 +146,22 @@ def list_answers(questionId):
             first80Chars = body[0:79]
             print("Index "+ str(index) + ":\nBody: "+first80Chars + "\nCreation Date: "+str(creationDate)+"\nScore: "+str(score))
             index = index +1
-    choice = input("Select the index number of the answer you would like to select: ")
+    
+    #choice = input("Select the index number of the answer you would like to select or enter 'exit' to exit or 'menu' to go back to main menu: ")
+    while (True):
+        choice = input("Select the index number of the answer you would like to select or enter 'exit' to exit or 'menu' to go back to main menu: ")
+        if (choice.lower() == "exit"):
+            exit()
+        elif (choice.lower() == "menu"):
+            mainMenu()
+        else:
+            try:
+                if (int(choice)>=index):
+                    print("Not a valid choice")
+                else:
+                    break
+            except:
+                print("Not a valid choice")
     chosenId = answers[int(choice)]
     results = posts.find({"Id": str(chosenId)})
     for result in results:
@@ -187,11 +202,19 @@ def list_answers(questionId):
         except:
             contentLicense = "No ContentLicense"
         print("Id: " +str(result["Id"]) +"\nPostTypeId: "+str(postTypeId) + "\nParent Id: "+str(parentId)+"\nCreationDate: "+str(creationDate)+"\nScore: "+str(score)+"\nBody: "+str(body)+"\nOwnerUserId: "+str(ownerUserId)+"\nLastActivityDate: "+str(lastActivityDate)+"\nCommentCount: "+str(commentCount)+"\nContentLicense: "+str(contentLicense)+"\nScore: "+str(score))
-        voteChoice = input("Would you like to vote on this post? ")
-        if (voteChoice.lower() == "yes"):
-            vote(str(chosenId))
-        else:
-            return
+        while(True):
+            voteChoice = input("Would you like to vote on this post? Enter either 'yes', 'no', 'exit' or 'menu': ")
+            if (voteChoice.lower() == "yes"):
+                vote(str(chosenId))
+                mainMenu()
+            elif (voteChoice.lower() == "no"):
+                mainMenu()
+            elif (voteChoice.lower() == "menu"):
+                mainMenu()
+            elif (voteChoice.lower() == "exit"):
+                exit()
+            else:
+                print("Not a valid choice") 
             
     #results = posts.find({$and: [{"Id": questionId},{"AcceptedAnswerId": questionId}, ])
     #({ $and: [ {<key1>:<value1>}, { <key2>:<value2>} ] })
@@ -244,15 +267,54 @@ def vote(postId):
         votes.insert_many(vote)
     newPostScore = int(postScore)+1
     posts.update({"Id":postId},{"$set":{"Score": str(newPostScore)}})
+    print("Vote added! Post "+ postId + " has also had its Score increased")
     return
 
+def exit():
+    global user
+    user = ""
+    # this will print when exit() is called
+    print("\nGoodbye!\n")
+
+    # standard python exit
+    sys.exit()
+
+def mainMenu():
+    print("Main menu:")
+    print("Enter 1 to provide a user id to use")
+    print("Enter 2 to post a question")
+    print("Enter 3 to search for a question")
+    print("Enter 4 to exit")
+    action = input("What action would you like to take?: ") 
+    #loops untill a valid choice is made
+    while (True):
+        #user chose to post ananswer to this post
+        if action == '1':
+            return
+            #ELENA TO DO
+        elif action == '2':
+            return
+            #ELENA TO DO
+        elif action == '3':
+            return
+            #ELENA TO DO
+        elif action == '4':
+            #user chose to exit
+            exit()
+        else:
+            #users did not make a valid choice, get a new choice
+            action = input("Invalid action please choose a valid action from either '1','2','3','4': ")
+
+
+
+
 
 
 
     
     
 
-
+mainMenu()
 answr = create_answer("352055", "NICEEEEEEe")
 answer = [
     {"Id": "352055",
