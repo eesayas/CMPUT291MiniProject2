@@ -89,6 +89,8 @@ def mainMenu():
         # user wants to search a question
         elif action == '3':
             result = searchQuestions(posts)
+            if result == None:
+                mainMenu()
             question_action(result)
 
         # user chose to exit
