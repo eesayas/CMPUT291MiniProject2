@@ -246,13 +246,51 @@ def vote(postId):
     posts.update({"Id":postId},{"$set":{"Score": str(newPostScore)}})
     return
 
+def exit():
+    global user
+    user = ""
+    # this will print when exit() is called
+    print("\nGoodbye!\n")
+
+    # standard python exit
+    sys.exit()
+
+def mainMenu():
+    print("Main menu:")
+    print("Enter 1 to provide a user id to use")
+    print("Enter 2 to post a question")
+    print("Enter 3 to search for a question")
+    print("Enter 4 to exit")
+    action = input("What action would you like to take? ") 
+    #loops untill a valid choice is made
+    while (True):
+        #user chose to post ananswer to this post
+        if action == '1':
+            return
+            #ELENA TO DO
+        elif action == '2':
+            return
+            #ELENA TO DO
+        elif action == '3':
+            return
+            #ELENA TO DO
+        elif action == '4':
+            #user chose to exit
+            exit()
+        else:
+            #users did not make a valid choice, get a new choice
+            action = input("Invalid action please choose a valid action from either '1','2','3','4'")
+
+
+
+
 
 
 
     
     
 
-
+mainMenu()
 answr = create_answer("352055", "NICEEEEEEe")
 answer = [
     {"Id": "352055",
