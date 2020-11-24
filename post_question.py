@@ -118,17 +118,25 @@ def q_input(user_id = ''):
 
 """----------------------------------------------------------------
 Generates a unique pid. If the pid already exists, then it will generate another one. 
-
+In order to be fast it tries to generate an Id between 10 and 1000 by
+getting a random number in this range. If it can find one that is unique -> done.
+If not we increase the lower and uper range of our bounds by a factor of one hundred and try again.
+Do this until we get a unique Id.
 Input: none
-Output: unique pid as a string (will be an integer from 1 to 9998 inclusive)
+Output: unique pid as a string
 
 ----------------------------------------------------------------"""
 def generateRandomId(collection):
-    q_pid = str(random.randint(1,9999))
+    lower = 10
+    higher = 1000
+    q_pid = str(random.randint(lower,higher))
     results = collection.find({'Id': q_pid})
     
     while results.count():
-        q_pid = str(random.randint(1,9999))
+        lower = lower * 100
+        higher = higher * 100
+        q_pid = str(random.randint(lower,higher))
         results = collection.find({'Id': q_pid})
+    print(q_pid)
 
     return q_pid

@@ -26,12 +26,12 @@ def vote(postId,user,posts,votes):
         anonymous = True
     #check to see if we can find a vote for this post where the userId is the same as our current user
     #using the $ in python from https://www.w3schools.com/python/python_mongodb_update.asp
-    results = votes.find({ "$and": [ { "UserId":user}, {"PostId":postId} ] })
-    for result in results:
-        print("HEHEHEHEHEHEHEH")
-        #result is found terminate here since vote is rejected
-        print("You have already voted on this post. Vote rejected")
-        return
+    if (anonymous == False):
+        results = votes.find({ "$and": [ {"PostId":postId}, { "UserId":user} ] })
+        for result in results:
+            #result is found terminate here since vote is rejected
+            print("You have already voted on this post. Vote rejected")
+            return
     
     #get a random and unique Id for this new vote
     voteId = generateRandomId(votes)
