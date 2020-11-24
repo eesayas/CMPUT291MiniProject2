@@ -48,6 +48,9 @@ def main():
     # insert to collection
     posts.insert_many(posts_data)
 
+    # create index
+    posts.create_index("terms")
+
     # from Tags.json
     with open("Tags.json") as t:
         tags_data = json.load(t)
