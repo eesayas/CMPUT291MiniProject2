@@ -128,8 +128,9 @@ def question_action(qid):
 
         # user chose to list answer to a question
         elif action == '2':
-            answers = list_answers(qid, posts)[0]
-            answersLength = list_answers(qid, posts)[1]
+            answersResult = list_answers(qid, posts)
+            answers = answersResult[0]
+            answersLength = answersResult[1]
             
             while (True):
                 choice = input("Select the index number of the answer you would like to select or enter 'exit' to exit or 'menu' to go back to main menu: ")
