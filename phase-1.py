@@ -114,6 +114,9 @@ Params: field - Title or Body or Tag (a string)
 Return: list - a list of string terms
 '''
 def extractTerms(field, isTag):
+    # set field string to lower case
+    field = field.lower()
+
     if isTag:
         delimeters = '\<|\>'
 
