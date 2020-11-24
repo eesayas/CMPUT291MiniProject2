@@ -24,7 +24,7 @@ def postQuestion(p_col, t_col, user):
     date_time = str(datetime.today())[:-3] # takes away the last three digits
     date_time = date_time.replace(' ', 'T') # replaces the space in the middle with 'T'
 
-    question = {'Id': generateRandomId(posts), 'PostTypeID': '1', 'CreationDate': date_time, 'Score': 0, 'ViewCount': 0, 
+    question = {'Id': generateRandomId(posts), 'PostTypeId': '1', 'CreationDate': date_time, 'Score': 0, 'ViewCount': 0, 
 			'AnswerCount': 0, 'CommentCount': 0, 'FavoriteCount': 0, 'ContentLicense': "CC BY-SA 2.5"}
 
 
