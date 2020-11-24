@@ -30,26 +30,26 @@ def main():
     mainMenu()
 
 def exit():
-    #global user
-    #user = ""
     # this will print when exit() is called
     print("\nGoodbye!\n")
 
     # standard python exit
     sys.exit()
-
+"""-----------------------------------------------------------------
+displayAnswer - Displays the full answer from the posts collection
+Purpose: To display to the user all the fields of a certain answer
+Input: chosenID - Id of the chosen answer
+Output: None
+-----------------------------------------------------------------"""
 def displayAnswer(chosenID):
     print("==================================================================")
     print("ANSWER INFO:\n")
     myResult = posts.find_one({"Id": chosenID}, {'_id': 0}) # Does not display the '_id' or ObjectId
-    #selected_post = posts.find_one({'Id': str(chosenId)}, {'_id': 0}) # Does not display the '_id' or ObjectId
-    #myResult = myResult.items()
-    #print(myResult.items())
-
-    for key, value in myResult.items():
-        #https://stackoverflow.com/questions/5904969/how-to-print-a-dictionarys-key
+    #idea for this from https://stackoverflow.com/questions/5904969/how-to-print-a-dictionarys-key
+    for key, value in myResult.items(): #iterate through all key value pairs and print them
         print(key + ':', value)
     print("==================================================================")
+    return
 
 
 """-----------------------------------------------------------------
@@ -80,8 +80,11 @@ def chooseUser():
 """-----------------------------------------------------------------
 mainMenu - This will show the menu
 Purpose: User can select which action to take
+Input: None
+Output: None
 -----------------------------------------------------------------"""
 def mainMenu():
+    #show user options and then ask for their choice
     print("Main menu:")
     print("Enter 1 to provide a user id to use")
     print("Enter 2 to post a question")
@@ -91,20 +94,23 @@ def mainMenu():
 
     #loops untill a valid choice is made
     while (True):
-        # user wants to provide user_id
+        # user wants to provide an id
         if action == '1':
             chooseUser()
             mainMenu()
 
         # user wants to post a question
         elif action == '2':
+            #post the question
             postQuestion(posts, tags, user)
             mainMenu()
 
         # user wants to search a question
         elif action == '3':
+            #get the result of the seach
             result = searchQuestions(posts)
             if result == None:
+                #do nothing since no search hits/results
                 mainMenu()
             question_action(result)
 
@@ -114,7 +120,6 @@ def mainMenu():
 
         # user did not make a valid choice, get a new choice
         else:
-            
             action = input("Invalid action please choose a valid action from either '1','2','3','4': ")
 
 """-----------------------------------------------------------------
@@ -140,13 +145,14 @@ def question_action(qid):
 
         # user chose to list answer to a question
         elif action == '2':
+            #list the answers to the question. And then gets returns a list with all the answers' ids and the ammount of answers
             answersResult = list_answers(qid, posts)
             answers = answersResult[0]
             answersLength = answersResult[1]
             if answersLength == 0:
                 print("There are no answers for this Question")
                 mainMenu()
-            
+            #loop until a valid choice is made of which answer to select
             while (True):
                 choice = input("Select the index number of the answer you would like to select or enter 'exit' to exit or 'menu' to go back to main menu: ")
                 if (choice.lower() == "exit"):
@@ -154,15 +160,19 @@ def question_action(qid):
                 elif (choice.lower() == "menu"):
                     mainMenu()
                 else:
+                #since they did not choose menu or exit they must choose a number
                     try:
                         if (int(choice)>=answersLength):
                             print("Not a valid choice")
                         else:
                             break
                     except:
+                        #did not choose number
                         print("Not a valid choice")
             chosenId = answers[int(choice)]
+            #display in full the fields of our answer
             displayAnswer(str(chosenId))
+            #loop until a valid choice is made of wether to vote on the answer
             while(True):
                 voteChoice = input("Would you like to vote on this post? Enter either 'yes', 'no', 'exit' or 'menu': ")
                 if (voteChoice.lower() == "yes"):

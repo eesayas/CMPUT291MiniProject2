@@ -22,7 +22,7 @@
     All answers are shown CHECK
     The accepted answer (if any) is marked and is the 1st answer CHECK
     The fields are displayed (as per spec) CHECK
-    An answer can be selected to see all information and for further answer actions *FAIL MISSING SOME FIELDS
+    An answer can be selected to see all information and for further answer actions *FAIL MISSING SOME FIELDS (Now fixed by using Elena's method for list question)
   Question/Answer action-Vote
     A vote for the post is recorded in votes collection (if the user has not voted on the same post) CHECK
     A unique vote id is assigned, the vote date is set to the current date *FAIL IS NOT NECESSARILY UNIQUE (Now fixed by feading votes into generate random id instead of posts)
@@ -30,6 +30,6 @@
     The post id and the vote type are set as per spec CHECK
     For the post being voted, the score field in Posts is increased by one CHECK
 
-    Issues: Question number is wrong in report if the user created a post and then we relogin as said user
-    Search issue. When we search RTL there should be in the results post with Id= 3 however no such post
-    Some fields are missing after we select an answer
+    Issues: Question number is wrong in report if the user created a post and then we relogin as said user (fixed)
+    Search issue. When we search RTL there should be in the results post with Id= 3 however no such post (fixed)
+    Some fields are missing after we select an answer (fixed)

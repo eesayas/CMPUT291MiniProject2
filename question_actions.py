@@ -2,67 +2,78 @@ from post_question import generateRandomId
 from datetime import datetime
 
 """-----------------------------------------------------------------
-The user will be asked to enter a title, a body, and tags (which can be zero tags or more), which will then be
-recorded in te database with a unique id
-Input: (optional) user ID. If the user is anonymous (has no user ID), then the default argument will be an empty string.
-Output: returns a dictionary (known as q_info_dict) with the title, body, and tags as its keys,
-where title and body are returned as strings, and the tags are returned as a list of strings
-eg. {'title': _____, 'body': ______, 'tag': [__,___,__]}
+create_answer - Creates an answer
+Purpose: Based upon the body provided it creates an answer in the 
+posts collection
+Input: questionId : The id of the question on which we are posting the answer
+body : the body we would like to use for the answer
+user : current user or "" to denote anonymous user
+posts : our collection of posts
+Output: None
 -----------------------------------------------------------------"""
 def create_answer(questionId, body, user, posts):
     # Used to modify the date and time format so that it matches the format shown in the Posts.json file 
     # eg. "CreationDate": "2011-02-22T21:47:22.987"
     date_time = str(datetime.today())[:-3] # takes away the last three digits
     date_time = date_time.replace(' ', 'T') # replaces the space in the middle with 'T'
-    theId = generateRandomId(posts)
+    theId = generateRandomId(posts) #get a unique Id for our answer
+    #fill in all the fields as per the assignment specifications
     answer = {
         "Id": theId,
         "PostTypeId": "2",
         "ParentId": questionId,
         "CreationDate": date_time,
-        "Score": 0,"Body": body,
-        "LastEditDate": date_time,
-        "LastActivityDate": date_time,
+        "Score": 0,
+        "Body": body,
         "CommentCount": 0,
         "ContentLicense":"CC BY-SA 2.5"
     }
 
     # insert following fields iff user is provided
-    if user:
+    if user != "":
         answer["OwnerUserId"] = user
-        answer["LastEditorUserId"] = user
 
-
+    #insert our answer to the posts collection
     posts.insert_one(answer)
-    # Print list of the _id values of the inserted documents
-    #movie_ids = ret.inserted_ids
-    #print(movie_ids)
-
-    # results = posts.find({"Body": body})
-    # for mem in results:
-    #     if mem["Body"] == body:
-    #         print(mem["Id"])
 
     print('Your answer has been posted!')
 
 
 """-----------------------------------------------------------------
-Purpose: Lists answers
+list_answers - List the answers for a question
+Purpose: Based upon the question provided by the user list the answers
+to this question, if the question has an accepted answer this will be
+listed first
+posts collection
+Input: questionId : The id of the question on which we are listing the answers
+posts: the posts collection
+Output: an array with two elements
+1. the array of all the id's of the answers for our question(in the same
+order and with the same indexes as these answers were presented to the user)
+2. The length of said list
 -----------------------------------------------------------------"""
 def list_answers(questionId,posts):
+    #used to track if the question has an accepted answer
     acceptedAnswerBool = False
+    #get the question from our posts collection
     results = posts.find({"Id": questionId})
+    #Id of accepted answer "" to represent no accepted answer
     acceptedAnswerID = ""
     for result in results:
+        #try to access assepted answer (will only work if with post has an accepted answer field)
         try:
             acceptedAnswerID = result["AcceptedAnswerId"]
             acceptedAnswerBool = True
         except:
+            #post does not have an accepted answer
             acceptedAnswerID = ""
             acceptedAnswerBool = False
+    #index if very important, used to maintain some connection between the answers we show to the user
+    #and the answers in our answers array
     index = 0
     answers=[0]*10000
     if (acceptedAnswerBool == True):
+        #make sure if there is an accepted answer that it appears first
         answers[index] = acceptedAnswerID
         results = posts.find({"Id": acceptedAnswerID})
         for result in results:
@@ -71,8 +82,10 @@ def list_answers(questionId,posts):
             body = result["Body"]
         first80Chars = body[0:79]
         #https://thispointer.com/python-how-to-get-first-n-characters-in-a-string/
+        #display the fields of our answer as per the assignment specs
         print("* Index "+ str(index) + ":\nBody: "+first80Chars + "\nCreation Date: "+str(creationDate)+"\nScore: "+str(score))
         index = index + 1
+    #now that accepted answer is dealt with present the rest of this question's answers to the user and fill the answers array with the same ordering
     results = posts.find({"ParentId": questionId})
     for result in results:
         if result["Id"] != acceptedAnswerID:
@@ -93,9 +106,3 @@ def list_answers(questionId,posts):
             print("Index "+ str(index) + ":\nBody: "+first80Chars + "\nCreation Date: "+str(creationDate)+"\nScore: "+str(score))
             index = index +1
     return [answers,index]
-    
-    #choice = input("Select the index number of the answer you would like to select or enter 'exit' to exit or 'menu' to go back to main menu: ")
-
-            
-    #results = posts.find({$and: [{"Id": questionId},{"AcceptedAnswerId": questionId}, ])
-    #({ $and: [ {<key1>:<value1>}, { <key2>:<value2>} ] })
