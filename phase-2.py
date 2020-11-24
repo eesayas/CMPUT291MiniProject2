@@ -21,7 +21,7 @@ def main():
 
     # user global var
     global user
-    user = None
+    user = ""
 
     # allow for user id provision
     chooseUser()
@@ -30,8 +30,8 @@ def main():
     mainMenu()
 
 def exit():
-    global user
-    user = ""
+    #global user
+    #user = ""
     # this will print when exit() is called
     print("\nGoodbye!\n")
 
@@ -56,11 +56,13 @@ def chooseUser():
 
         # set user 
         global user
+
         user = user_id
 
     # if a user id has been provided but no match in db
     elif user_id != '' and not confirm_user:
         nullReport(user_id)
+        user = user_id
 
 """-----------------------------------------------------------------
 mainMenu - This will show the menu
@@ -83,6 +85,7 @@ def mainMenu():
 
         # user wants to post a question
         elif action == '2':
+            print("HEYEYEEEEEE" +str(user))
             postQuestion(posts, tags, user)
             mainMenu()
 
@@ -125,7 +128,9 @@ def question_action(qid):
 
         # user chose to list answer to a question
         elif action == '2':
-            answers = list_answers(qid, posts)
+            answers = list_answers(qid, posts)[0]
+            answersLength = list_answers(qid, posts)[1]
+            
             while (True):
                 choice = input("Select the index number of the answer you would like to select or enter 'exit' to exit or 'menu' to go back to main menu: ")
                 if (choice.lower() == "exit"):
@@ -134,7 +139,7 @@ def question_action(qid):
                     mainMenu()
                 else:
                     try:
-                        if (int(choice)>=index):
+                        if (int(choice)>=answersLength):
                             print("Not a valid choice")
                         else:
                             break

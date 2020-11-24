@@ -92,7 +92,7 @@ def list_answers(questionId,posts):
             first80Chars = body[0:79]
             print("Index "+ str(index) + ":\nBody: "+first80Chars + "\nCreation Date: "+str(creationDate)+"\nScore: "+str(score))
             index = index +1
-    return answers
+    return [answers,index]
     
     #choice = input("Select the index number of the answer you would like to select or enter 'exit' to exit or 'menu' to go back to main menu: ")
 
