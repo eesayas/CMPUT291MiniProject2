@@ -85,7 +85,6 @@ def mainMenu():
 
         # user wants to post a question
         elif action == '2':
-            print("HEYEYEEEEEE" +str(user))
             postQuestion(posts, tags, user)
             mainMenu()
 

@@ -11,6 +11,7 @@ Params: posts, tags (collections)
 def postQuestion(p_col, t_col, user):
     global posts, tags
     posts, tags = p_col, t_col
+	
     
     # returns a dictionary with the title, body, and tag(s) as its keys
 	# eg. {'title': 't', 'body': 'b', 'tag': ['123']}
@@ -121,12 +122,12 @@ Input: none
 Output: unique pid as a string (will be an integer from 1 to 9998 inclusive)
 
 ----------------------------------------------------------------"""
-def generateRandomId(posts):
+def generateRandomId(collection):
     q_pid = str(random.randint(1,9999))
-    results = posts.find({'Id': q_pid})
+    results = collection.find({'Id': q_pid})
     
     while results.count():
         q_pid = str(random.randint(1,9999))
-        results = posts.find({'Id': q_pid})
+        results = collection.find({'Id': q_pid})
 
     return q_pid

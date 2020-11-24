@@ -25,7 +25,7 @@ def vote(postId,user,posts,votes):
             postType = "answer"
         else:
             postType = "question"
-    voteId = generateRandomId(posts)
+    voteId = generateRandomId(votes)
     # eg. "CreationDate": "2011-02-22T21:47:22.987"
     date_time = str(datetime.today())[:-3] # takes away the last three digits
     date_time = date_time.replace(' ', 'T') # replaces the space in the middle with 'T'
