@@ -131,6 +131,9 @@ def question_action(qid):
             answersResult = list_answers(qid, posts)
             answers = answersResult[0]
             answersLength = answersResult[1]
+            if answersLength == 0:
+                print("There are no answers for this Question")
+                mainMenu()
             
             while (True):
                 choice = input("Select the index number of the answer you would like to select or enter 'exit' to exit or 'menu' to go back to main menu: ")
