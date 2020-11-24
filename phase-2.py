@@ -132,8 +132,9 @@ def question_action(qid):
     print("Question Actions:")
     print("Enter 1 to post an answer to this question")
     print("Enter 2 to list the answers of the question (from there you can place a vote on an answer")
-    print("Enter 3 to go back to main menu")
-    print("Enter 4 to exit")
+    print("Enter 3 to vote on this question")
+    print("Enter 4 to go back to main menu")
+    print("Enter 5 to exit")
     action = input("What action would you like to take?: ") 
     while (True):
 
@@ -187,13 +188,16 @@ def question_action(qid):
                 else:
                     print("Not a valid choice") 
             mainMenu()
-
-        # user wants to go back
+        
+        # user wants to vote on the question
         elif action == '3':
+            pass
+        # user wants to go back
+        elif action == '4':
             mainMenu()
 
         # user chose to exit
-        elif action == '4':
+        elif action == '5':
             exit()
 
         # users did not make a valid choice, get a new choice
