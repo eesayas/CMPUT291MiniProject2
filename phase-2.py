@@ -38,6 +38,19 @@ def exit():
     # standard python exit
     sys.exit()
 
+def displayAnswer(chosenID):
+    print("==================================================================")
+    print("ANSWER INFO:\n")
+    myResult = posts.find_one({"Id": chosenID}, {'_id': 0}) # Does not display the '_id' or ObjectId
+    #selected_post = posts.find_one({'Id': str(chosenId)}, {'_id': 0}) # Does not display the '_id' or ObjectId
+    #myResult = myResult.items()
+    #print(myResult.items())
+
+    for key, value in myResult.items():
+        #https://stackoverflow.com/questions/5904969/how-to-print-a-dictionarys-key
+        print(key + ':', value)
+    print("==================================================================")
+
 
 """-----------------------------------------------------------------
 chooseUser - Allow user to propvide user_id
@@ -149,60 +162,22 @@ def question_action(qid):
                     except:
                         print("Not a valid choice")
             chosenId = answers[int(choice)]
-            results = posts.find({"Id": str(chosenId)})
-            for result in results:
-                try: 
-                    postTypeId = result["PostTypeId"]
-                except:
-                    postTypeId = "No postTypeId"
-                try: 
-                    parentId = result["ParentId"]
-                except:
-                    parentId = "No parentId"
-                try: 
-                    creationDate = result["CreationDate"]
-                except:
-                    creationDate = "No CreationDate"
-                try: 
-                    score = result["Score"]
-                except:
-                    score = "No Score"
-                try: 
-                    body = result["Body"]
-                except:
-                    body = "No Body"
-                try: 
-                    ownerUserId = result["OwnerUserId"]
-                except:
-                    ownerUserId = "No OwnerUserId"
-                try: 
-                    lastActivityDate = result["LastActivityDate"]
-                except:
-                    lastActivityDate = "No LastActivityDate"
-                try: 
-                    commentCount = result["CommentCount"]
-                except:
-                    commentCount = "No CommentCount"
-                try: 
-                    contentLicense = result["ContentLicense"]
-                except:
-                    contentLicense = "No ContentLicense"
-                print("Id: " +str(result["Id"]) +"\nPostTypeId: "+str(postTypeId) + "\nParent Id: "+str(parentId)+"\nCreationDate: "+str(creationDate)+"\nScore: "+str(score)+"\nBody: "+str(body)+"\nOwnerUserId: "+str(ownerUserId)+"\nLastActivityDate: "+str(lastActivityDate)+"\nCommentCount: "+str(commentCount)+"\nContentLicense: "+str(contentLicense)+"\nScore: "+str(score))
-                while(True):
-                    voteChoice = input("Would you like to vote on this post? Enter either 'yes', 'no', 'exit' or 'menu': ")
-                    if (voteChoice.lower() == "yes"):
-                        vote(str(chosenId),user,posts,votes)
-                        mainMenu()
-                    elif (voteChoice.lower() == "no"):
-                        mainMenu()
-                    elif (voteChoice.lower() == "menu"):
-                        mainMenu()
-                    elif (voteChoice.lower() == "exit"):
-                        exit()
-                    else:
-                        print("Not a valid choice") 
-                mainMenu()
-    
+            displayAnswer(str(chosenId))
+            while(True):
+                voteChoice = input("Would you like to vote on this post? Enter either 'yes', 'no', 'exit' or 'menu': ")
+                if (voteChoice.lower() == "yes"):
+                    vote(str(chosenId),user,posts,votes)
+                    mainMenu()
+                elif (voteChoice.lower() == "no"):
+                    mainMenu()
+                elif (voteChoice.lower() == "menu"):
+                    mainMenu()
+                elif (voteChoice.lower() == "exit"):
+                    exit()
+                else:
+                    print("Not a valid choice") 
+            mainMenu()
+
         # user wants to go back
         elif action == '3':
             mainMenu()
