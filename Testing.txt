@@ -3,7 +3,7 @@
     A user id can be provided (but is not mandatory) CHECK
     If a user id from the database is entered, a report is given (as per spec) CHECK
   Post a question
-    The information is obtained and recorded in the database CHECK (*TAGS LOOK A LITTLE WONKY)
+    The information is obtained and recorded in the database CHECK (*TAGS LOOK A LITTLE WONKY - FIXED)
     A unique id is assigned, and the post date is set to the current date CHECK
     The owner user is set to the current user (if a userid is provided) CHECK
     The post type and the content license are set (as per spec) CHECK
