@@ -3,12 +3,12 @@ from post_question import generateRandomId
 
 """-----------------------------------------------------------------
 vote - Allows the user to vote on a post
-Purpose: Based upon the answer provided by the user vote on this post
+Purpose: Based upon the answer or question provided by the user vote on this post
 by adding a new vote to the votes collection. If there is a user
-logged in and said user has already voted on this answer the vote
+logged in and said user has already voted on this answer or question the vote
 is rejected. If the vote is succesfully added then we increase the
-score of the post in the posts collection corresponding to the answer
-Input: postId : The id of the answer on which the user is trying to vote
+score of the post in the posts collection corresponding to the answer or question
+Input: postId : The id of the question or answer on which the user is trying to vote
 user:The user or "" for anonymous user
 posts: The posts collection
 votes: The votes collection

@@ -191,7 +191,20 @@ def question_action(qid):
         
         # user wants to vote on the question
         elif action == '3':
-            pass
+            while(True):
+                voteChoice = input("Would you like to vote on this post? Enter either 'yes', 'no', 'exit' or 'menu': ")
+                if (voteChoice.lower() == "yes"):
+                    vote(qid,user,posts,votes)
+                    mainMenu()
+                elif (voteChoice.lower() == "no"):
+                    mainMenu()
+                elif (voteChoice.lower() == "menu"):
+                    mainMenu()
+                elif (voteChoice.lower() == "exit"):
+                    exit()
+                else:
+                    print("Not a valid choice") 
+            mainMenu()
         # user wants to go back
         elif action == '4':
             mainMenu()
