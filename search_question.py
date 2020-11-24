@@ -13,10 +13,10 @@ def user_keywords():
 
     while not finished:
 
-        user_input = input('Enter a keyword: ')
+        user_input = input('Enter a keyword: ').lower()
 
         while user_input.strip() == '': # If the user enters an empty string as their keyword
-            user_input = input('Enter a keyword: ')
+            user_input = input('Enter a keyword: ').lower()
 
         keyword_list.append(user_input.strip()) # assuming if the user adds any random spaces (eg. '   no')
 
