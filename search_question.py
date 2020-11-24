@@ -44,6 +44,7 @@ def searchQuestions(posts):
     q_num = 1 # will be used to display the results (eg. Question 1, Question 2, etc)
     posts_list = []  # keeps track of the posts and prevents the same posts from being displayed more than once
     limit_num = 5
+    post_count = 0
     selected = False
     while not selected: 
         for keyword in keyword_list: # for each keyword entered by the user
@@ -66,6 +67,7 @@ def searchQuestions(posts):
 
                 if post['Id'] not in posts_list:
                     posts_list.append(post['Id'])
+                    post_count +=1
                     print('------------------------------')
                     print('Question ' + str(q_num) + ': ')
                     print('Title: ', post['Title'])
@@ -86,17 +88,16 @@ def searchQuestions(posts):
         # the user chooses from the results displayed above
         user_select = input("Select the question by typing in the number, or type in 's' to see more: ")
         
+        while user_select not in (tuple(q_options.keys()) + tuple('s')): # all the possible options in a tuple ('1','2',...'s')
+            user_select = input('Please enter a valid input: ')
+
         if user_select == 's':
             limit_num += 5
             continue
+        else: # the user entered one of the question numbers
+            print('You have chosen question ' + user_select + '!')
+            break
 
-        # If the user did not enter 's', then their other option is to enter one of the question numebrs
-        while user_select not in q_options.keys():  
-            user_select = input('Please enter a valid input: ')  
-
-        print('You have chosen question ' + user_select + '!')
-        break # leave the while loop
-    
     # the following displays all the fields of the question post selected by the user
     print('\n==================================================================')
     print('POST INFO: \n')
