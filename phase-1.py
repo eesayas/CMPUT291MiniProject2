@@ -1,11 +1,17 @@
-import json, sys, re
+import json, sys, re, time
 from pymongo import MongoClient
 
 def main():
-    # TODO clarify error check on invalid port?
-    port = sys.argv[1]
+    startTime = time.time()
 
-    client = MongoClient('mongodb://localhost:' + port)
+    # TODO clarify error check on invalid port?
+
+    try:
+        port = sys.argv[1]
+        client = MongoClient('mongodb://localhost:' + port)
+    except IndexError:
+        print("You have to provide a port number")
+        sys.exit()
 
     # Create or open database
     db = client["291db"]
@@ -59,6 +65,7 @@ def main():
     votes.insert_many(votes_data)
 
     print("Successfully inserted Posts.json, Tags.json, Votes.json to '291db' Mongo database on port " + port)
+    print ('The script took {0} minutes!'.format((time.time() - startTime) / 60 ))
 
 '''
 setTerms() - Helper function: Set Terms for a post
