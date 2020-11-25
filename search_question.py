@@ -7,7 +7,7 @@ Output: a list containing all the keywords that the user has entered (where each
 -----------------------------------------------------------------"""
 def user_keywords():
 
-    keyword_list = [] # stores the keywords that user has typed in
+    keyword_list = [] # stores the keywords that user has typed in (keywords will all be lowercase)
 
     finished = False # the user has not finished searching keywords
 
@@ -17,8 +17,11 @@ def user_keywords():
 
         while user_input.strip() == '': # If the user enters an empty string as their keyword
             user_input = input('Enter a keyword: ').lower()
-
-        keyword_list.append(user_input.strip()) # assuming if the user adds any random spaces (eg. '   no')
+        
+        if user_input in keyword_list: 
+            print("You have already entered that keyword.")
+        else: # if the user has not entered the keyword yet
+            keyword_list.append(user_input.strip()) # assuming if the user adds any random spaces (eg. '   no')
 
         ask_again = input('Would you like to enter another keyword (y/n): ').lower()
 
