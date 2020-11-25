@@ -109,6 +109,9 @@ def searchQuestions(posts):
     # increases the view count of the question post by 1 (before displaying all the fields)
     posts.update_one({'Id': q_options[user_select]}, {'$set': {'ViewCount': selected_post['ViewCount'] + 1}})
 
+    #used to make sure our viewCount is our new and updated one
+    selected_post = posts.find_one({'Id': q_options[user_select]}, {'_id': 0}) # Does not display the '_id' or ObjectId
+
     for key,value in selected_post.items(): # prints out all the fields of a question post
         print(key + ':', value) 
     print('==================================================================')
