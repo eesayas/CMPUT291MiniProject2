@@ -110,28 +110,3 @@ def nullReport(user_id):
     print('Average Answers Score:', 0)
     print('Number of votes registered:', 0)
     print("==========================================")
-
-# def main():
-# 	user_id = ask_for_user_id()
-# 	confirm_user = checks_for_user_id(user_id)
-
-# 	if confirm_user: # if a user id has been provided and the user id already exists 
-
-#         showReport(p_collection, v_collection)
-
-
-# Sources used:
-# https://docs.mongodb.com/manual/aggregation/#aggregation-pipeline
-# https://stackoverflow.com/questions/879173/how-to-ignore-deprecation-warnings-in-python
-
-
-	# # if a user id has been provided but the user did not exist before
-	# elif user_id != '' and not confirm_user: 
-	# 	print("==========================================")
-	# 	print("USER REPORT FOR USER #", user_id, '\n')
-	# 	print('Question Count:', 0)
-	# 	print('Average Questions Score:', 0)
-	# 	print('Answer Count:', 0)
-	# 	print('Average Answers Score:', 0)
-	# 	print('Number of votes registered:', 0)
-	# 	print("==========================================")

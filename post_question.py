@@ -137,6 +137,5 @@ def generateRandomId(collection):
         higher = higher * 100
         q_pid = str(random.randint(lower,higher))
         results = collection.find({'Id': q_pid})
-    print(q_pid)
 
     return q_pid
