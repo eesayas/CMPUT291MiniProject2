@@ -8,9 +8,12 @@ from answer_actions import vote
 
 def main():
     # TODO clarify error check on invalid port?
-    port = sys.argv[1]
-
-    client = MongoClient('mongodb://localhost:' + port)
+    try:
+        port = sys.argv[1]
+        client = MongoClient('mongodb://localhost:' + port)
+    except IndexError:
+        print("You have to provide a port number")
+        sys.exit()
 
     # open database
     db = client["291db"]
