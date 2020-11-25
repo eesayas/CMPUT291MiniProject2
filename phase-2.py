@@ -7,12 +7,11 @@ from question_actions import create_answer, list_answers
 from answer_actions import vote
 
 def main():
-    # TODO clarify error check on invalid port?
     try:
         port = sys.argv[1]
         client = MongoClient('mongodb://localhost:' + port)
-    except IndexError:
-        print("You have to provide a port number")
+    except:
+        print("You have to provide a valid port number")
         sys.exit()
 
     # open database
@@ -20,7 +19,7 @@ def main():
 
     # open collections
     global posts, tags, votes
-    posts, tags, votes = db["posts"], db["tags"], db["votes"]
+    posts, tags, votes = db["Posts"], db["Tags"], db["Votes"]
 
     # user global var
     global user

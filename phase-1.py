@@ -4,13 +4,11 @@ from pymongo import MongoClient
 def main():
     startTime = time.time()
 
-    # TODO clarify error check on invalid port?
-
     try:
         port = sys.argv[1]
         client = MongoClient('mongodb://localhost:' + port)
-    except IndexError:
-        print("You have to provide a port number")
+    except:
+        print("You have to provide a valid port number")
         sys.exit()
 
     # Create or open database
@@ -20,7 +18,7 @@ def main():
     colsInDB = db.list_collection_names()
 
     # List of collections in the project
-    colsInProj = [ "posts", "tags", "votes" ]
+    colsInProj = [ "Posts", "Tags", "Votes" ]
 
     # for each collection in project
     #   if in colsInDB, then drop collection
@@ -29,7 +27,7 @@ def main():
             db[col].drop()
 
     # create collections, then store access to global variables?
-    posts, tags, votes = db["posts"], db["tags"], db["votes"]
+    posts, tags, votes = db["Posts"], db["Tags"], db["Votes"]
 
     # insert data from Posts.json
     with open("Posts.json") as p:
@@ -124,7 +122,10 @@ def extractTerms(field, isTag):
         terms = re.split(delimeters, field)
 
     else:
-        delimeters = ' |\n|\?|\"|\.|\,|\(|\)'
+        # remove unicode
+        field = field.encode("ascii", "ignore").decode()
+
+        delimeters = r' |/|\||\n|\?|\"|\.|\,|\(|\)|\;|\:|\[|\]|\{|\}|\'|\..|\-'
 
         # parse HTML tags
         field = re.sub('<[^<]*?/?>', ' ', field) 
