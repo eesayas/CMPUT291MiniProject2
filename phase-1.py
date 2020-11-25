@@ -55,7 +55,7 @@ def main():
         tags_data = tags_data["tags"]["row"] # extract proper data from JSON
 
     # UNCOMMENT THIS IF TAG.JSON WILL NOT HAVE CAPITALS ABSOLUTELY
-    tags_data = map(convertTagtoLower, tags_data)
+    #tags_data = map(convertTagtoLower, tags_data)
 
     # insert to colleciton
     tags.insert_many(tags_data)
