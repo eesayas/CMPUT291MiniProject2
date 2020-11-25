@@ -64,10 +64,7 @@ eg. {'title': _____, 'body': ______, 'tag': [__,___,__]}
 -----------------------------------------------------------------"""
 def q_input(user_id = ''):
     tag_list = [] # will be used to store the tag(s) that the user has typed in
-    lower_tag_set = set() # stores the tag(s) that the user has typed in, but in lower case (also prevents duplicates)
-
-    # lower_tag_set is used since the user may want to enter tags that are in uppercase in their post
-    # therefore, tag_list remains unchanged by what the user types in (their upper and lowercases will remain unchanged)
+    
 
     # will be used to store the title, body, and tags 
     q_info_dict = {'Title': '', 'Body': '', 'Tags':'', 'OwnerUserId': str(user_id)} 
@@ -89,15 +86,15 @@ def q_input(user_id = ''):
         ask_tag = input("Please enter a valid input (y/n): ")
 
     while ask_tag == 'y': # while the user would like to enter a tag
-        user_tag = input("Enter a tag (one tag at a time): ")
+        user_tag = input("Enter a tag (one tag at a time): ").lower()
 
         while user_tag.strip() == '': # if the user enters an empty string
-            user_tag = input("Invalid Input. Enter a tag (one tag at a time): ")
+            user_tag = input("Invalid Input. Enter a tag (one tag at a time): ").lower()
 
         # if the tag has not already been entered before (regardless of upper/lower case)
-        if user_tag.lower() not in lower_tag_set: 
+        if user_tag not in tag_list: 
             tag_list.append(user_tag.strip()) # strip() is used in case there are random spaces used eg. "   tag  "
-            lower_tag_set.add(user_tag.strip().lower())
+            
         else: # if the tag has already been entered
             print("You have already entered this tag. Please enter another tag.") # prevents the duplication of tags
         
