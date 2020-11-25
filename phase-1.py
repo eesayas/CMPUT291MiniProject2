@@ -54,6 +54,9 @@ def main():
         tags_data = json.load(t)
         tags_data = tags_data["tags"]["row"] # extract proper data from JSON
 
+    # UNCOMMENT THIS IF TAG.JSON WILL NOT HAVE CAPITALS ABSOLUTELY
+    tags_data = map(convertTagtoLower, tags_data)
+
     # insert to colleciton
     tags.insert_many(tags_data)
 
@@ -157,6 +160,20 @@ def filterSmallTerms(term):
         return False
     else:
         return True
+
+
+'''
+convertTagtoLower() - Helper function: Convert tag to lower
+Purpose: Given a term, if its length is less than 3 return False, else True
+
+Params: tag - object
+
+Return: tag - updated objet
+'''
+def convertTagtoLower(tag):
+    tag["TagName"] = tag["TagName"].lower()
+
+    return tag
 
 # call main
 main()
