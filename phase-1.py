@@ -125,7 +125,7 @@ def extractTerms(field, isTag):
         # remove unicode
         field = field.encode("ascii", "ignore").decode()
 
-        delimeters = r' |/|\||\n|\?|\"|\.|\,|\(|\)|\;|\:|\[|\]|\{|\}|\'|\..|\-'
+        delimeters = r' |/|\||\n|\?|\"|\.|\,|\(|\)|\;|\:|\[|\]|\{|\}|\'|\...|\-'
 
         # parse HTML tags
         field = re.sub('<[^<]*?/?>', ' ', field) 

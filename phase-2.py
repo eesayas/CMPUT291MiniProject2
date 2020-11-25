@@ -133,7 +133,7 @@ def question_action(qid):
     print('==================================================================')
     print("Question Actions:")
     print("Enter 1 to post an answer to this question")
-    print("Enter 2 to list the answers of the question (from there you can place a vote on an answer")
+    print("Enter 2 to list the answers of the question (from there you can place a vote on an answer)")
     print("Enter 3 to vote on this question")
     print("Enter 4 to go back to main menu")
     print("Enter 5 to exit")

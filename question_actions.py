@@ -84,6 +84,8 @@ def list_answers(questionId,posts):
         #https://thispointer.com/python-how-to-get-first-n-characters-in-a-string/
         #display the fields of our answer as per the assignment specs
         print("* Index "+ str(index) + ":\nBody: "+first80Chars + "\nCreation Date: "+str(creationDate)+"\nScore: "+str(score))
+        print("======================================")
+
         index = index + 1
     #now that accepted answer is dealt with present the rest of this question's answers to the user and fill the answers array with the same ordering
     results = posts.find({"ParentId": questionId})
@@ -104,5 +106,6 @@ def list_answers(questionId,posts):
                 body = "No body"
             first80Chars = body[0:79]
             print("Index "+ str(index) + ":\nBody: "+first80Chars + "\nCreation Date: "+str(creationDate)+"\nScore: "+str(score))
+            print("======================================")
             index = index +1
     return [answers,index]
